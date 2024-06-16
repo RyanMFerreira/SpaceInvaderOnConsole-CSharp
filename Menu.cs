@@ -1,4 +1,4 @@
-﻿using SpaceInvaderOnConsole_CSharp;
+﻿using SpaceInvadersOnConsole_CSharp;
 class Menu
 {
     static void Main()

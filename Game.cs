@@ -1,6 +1,7 @@
-﻿using ProjectileNamespace;
+﻿using EnemyNamespace;
+using ProjectileNamespace;
 
-namespace SpaceInvaderOnConsole_CSharp
+namespace SpaceInvadersOnConsole_CSharp
 {
     internal class Game
     {
@@ -13,17 +14,19 @@ namespace SpaceInvaderOnConsole_CSharp
             int ShipPosition_Y = MapHeight - 2;
 
             int Score = 0;
-            int RemainingAttempts = 5;
 
+            int RemainingAttempts = 5;
             double TotalLives = 50;
             double RemainingLives = TotalLives;
-
             string HPBar = "";
 
             bool GameOver = false;
             bool Win = false;
 
+            Random RandomPosition = new Random();
+
             List<Projectile> projectiles = new List<Projectile>();
+            List<Enemy> enemies = new List<Enemy>();
 
             while (true)
             {
@@ -61,7 +64,6 @@ namespace SpaceInvaderOnConsole_CSharp
                     }
                     else if (KeyPressed.Key == ConsoleKey.Spacebar)
                     {
-                        // Adiciona um novo projétil
                         projectiles.Add(new Projectile(ShipPosition_X, ShipPosition_Y));
                     }
                     else if (KeyPressed.Key == ConsoleKey.P)
@@ -70,7 +72,19 @@ namespace SpaceInvaderOnConsole_CSharp
                     }
                 }
 
-                // Atualiza a posição dos projetéis e remove os que estão fora da tela
+                if (DateTime.Now.Second % 10 == 0)
+                {
+                    int startX = RandomPosition.Next(1, MapWeight - 2);
+                    int startY = 1;
+
+                    enemies.Add(new Enemy(startX, startY));
+                }
+
+                for (int i = enemies.Count - 1; i >= 0; i--)
+                {
+                    enemies[i].MoveForward();
+                }
+
                 for (int i = projectiles.Count - 1; i >= 0; i--)
                 {
                     projectiles[i].UpdatePosition();
@@ -102,7 +116,11 @@ namespace SpaceInvaderOnConsole_CSharp
                         }
                         else if (projectiles.Exists(p => p.X == X && p.Y == Y))
                         {
-                            SceneRendering += "|"; // Representa o projétil
+                            SceneRendering += "|";
+                        }
+                        else if (enemies.Exists(e => e.X == X && e.Y == Y))
+                        {
+                            SceneRendering += "X";
                         }
                         else
                         {
@@ -119,7 +137,8 @@ namespace SpaceInvaderOnConsole_CSharp
                 Console.WriteLine(SceneRendering);
 
                 Console.WriteLine($"Debug:\nPos_X = {ShipPosition_X}. Pos_Y = {ShipPosition_Y}. H = {MapHeight}. W = {MapWeight}\n" +
-                    $"Game Over: {GameOver}");
+                    $"Game Over: {GameOver}\n" +
+                    $"Quantidade de projéteis: {projectiles.Count}. Quantidade de inimigos: {enemies.Count}");
 
                 if (RemainingLives <= 0)
                 {

@@ -11,7 +11,7 @@ O objetivo principal deste projeto é recriar a experiência do jogo *Space Invade
 - **Linguagem:** C#
 - **Plataforma:** Console
 
-### Funcionalidades Implementadas
+### Funcionalidades Implementadas (até o momento)
 - **Menu Básico:** Implementação de uma interface intuitiva.
 - **Renderização do conteúdo:** Renderiza os elementos no Console.
 - **Movimentação do jogador:** Permite que o jogador se mova e dispare projéteis para destruir os inimigos.
@@ -19,7 +19,6 @@ O objetivo principal deste projeto é recriar a experiência do jogo *Space Invade
 
 ### Próximos Passos
 1. Adicionar inimigos:
-   - Design dos inimigos;
    - Comportamento e padrões de movimento.
    - Inimigos devem ser capazes de se mover e disparar contra o jogador.
 2. Implementar níveis de dificuldade:
@@ -29,6 +28,6 @@ O objetivo principal deste projeto é recriar a experiência do jogo *Space Invade
 4. Melhorar a interface do usuário:
    - Criar uma interface mais intuitiva e visualmente agradável.
 
-#### Requisito Opcional:
+#### Requisitos Opcionais:
 - Implementação das artes ASCII nas naves e inimigos;
 - Escolha entre duas possíveis naves diferentes;
