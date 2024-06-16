@@ -13,8 +13,7 @@
 
         public void MoveForward()
         {
-            if (DateTime.Now.Second % 2 == 0)
-                Y += 1;
+            Y++;
         }
     }
 }

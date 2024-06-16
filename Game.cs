@@ -20,6 +20,9 @@ namespace SpaceInvadersOnConsole_CSharp
             double RemainingLives = TotalLives;
             string HPBar = "";
 
+            int EnemyMoveCounter = 0;
+            int EnemyMoveLimit = 10;
+
             bool GameOver = false;
             bool Win = false;
 
@@ -72,26 +75,35 @@ namespace SpaceInvadersOnConsole_CSharp
                     }
                 }
 
-                if (DateTime.Now.Second % 5 == 0)
-                {
-                    SpawnEnemy(RandomPosition, MapWeight, enemies);
-                }
-
-                static void SpawnEnemy(Random RandomPosition, int MapWeight, List<Enemy> enemies)
+                static void SpawnEnemy(Random RandomPosition, int MapHeight, int MapWeight, List<Enemy> enemies)
                 {
                     int startX = RandomPosition.Next(1, MapWeight - 2);
-                    int startY = 1;
+                    int startY = RandomPosition.Next(1, MapHeight / 7);
 
                     enemies.Add(new Enemy(startX, startY));
                 }
 
+                if (enemies.Count < 6)
+                {
+                    SpawnEnemy(RandomPosition, MapHeight, MapWeight, enemies);
+                }
+
                 for (int i = enemies.Count - 1; i >= 0; i--)
                 {
-                    enemies[i].MoveForward();
                     if (enemies[i].Y > MapHeight)
                     {
                         enemies.RemoveAt(i);
                     }
+                }
+
+                EnemyMoveCounter++;
+                if (EnemyMoveCounter >= EnemyMoveLimit)
+                {
+                    foreach (var enemy in enemies)
+                    {
+                        enemy.MoveForward();
+                    }
+                    EnemyMoveCounter = 0;
                 }
 
                 for (int i = projectiles.Count - 1; i >= 0; i--)
