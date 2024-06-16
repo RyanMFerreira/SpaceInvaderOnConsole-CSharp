@@ -72,7 +72,12 @@ namespace SpaceInvadersOnConsole_CSharp
                     }
                 }
 
-                if (DateTime.Now.Second % 10 == 0)
+                if (DateTime.Now.Second % 5 == 0)
+                {
+                    SpawnEnemy(RandomPosition, MapWeight, enemies);
+                }
+
+                static void SpawnEnemy(Random RandomPosition, int MapWeight, List<Enemy> enemies)
                 {
                     int startX = RandomPosition.Next(1, MapWeight - 2);
                     int startY = 1;
@@ -83,6 +88,10 @@ namespace SpaceInvadersOnConsole_CSharp
                 for (int i = enemies.Count - 1; i >= 0; i--)
                 {
                     enemies[i].MoveForward();
+                    if (enemies[i].Y > MapHeight)
+                    {
+                        enemies.RemoveAt(i);
+                    }
                 }
 
                 for (int i = projectiles.Count - 1; i >= 0; i--)

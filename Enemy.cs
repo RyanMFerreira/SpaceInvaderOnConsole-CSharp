@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Timers;
-
-namespace EnemyNamespace
+﻿namespace EnemyNamespace
 {
     internal class Enemy
     {
         public int X;
         public int Y;
-        public float Speed = 0.5f;
 
         public Enemy(int startX, int startY)
         {
@@ -18,7 +13,8 @@ namespace EnemyNamespace
 
         public void MoveForward()
         {
-            Y += (int)Speed;
+            if (DateTime.Now.Second % 2 == 0)
+                Y += 1;
         }
     }
 }
