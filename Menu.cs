@@ -38,7 +38,7 @@ class Menu
             {
                 if (SelectedOption == 0)
                 {
-                    Game.Start();
+                    GameGuide();
                     break;
                 }
                 else if (SelectedOption == 1)
@@ -87,6 +87,32 @@ class Menu
                 else if (SelectedOption == 1)
                 {
                 }
+            }
+        }
+    }
+
+    static void GameGuide()
+    {
+        while (true)
+        {
+            Console.Clear();
+
+            Console.WriteLine(" ======================================\n" +
+                " |             <Tutorial>             |\n" +
+                " ======================================\n\n" +
+                " Controles:\n\n Setas direcionais:\n" +
+                "   ^      - Mover para cima\n" +
+                " < - >    - Mover para os lados\n" +
+                "   v      - Mover para baixo\n\n" +
+                " [Espaço] - Disparar\n\n" +
+                " Objetivo:\n - Sobreviva o maior tempo possível\n   destruindo as naves inimigas.\n\n" +
+                " Pressione ENTER para começar.");
+
+            ConsoleKeyInfo KeyPressed = Console.ReadKey();
+            if (KeyPressed.Key == ConsoleKey.Enter)
+            {
+                Game.Start();
+                break;
             }
         }
     }

@@ -1,37 +1,42 @@
-﻿namespace SpaceInvaderOnConsole_CSharp
+﻿using ProjectileNamespace;
+
+namespace SpaceInvaderOnConsole_CSharp
 {
     internal class Game
     {
         public static void Start()
         {
-            int MapWeight = 49;
-            int MapHeight = 25;
+            int MapWeight = 48;
+            int MapHeight = 28;
 
-            int ShipPosition_X;
-            int ShipPosition_Y;
-            ShipPosition_X = MapWeight / 2;
-            ShipPosition_Y = MapHeight - 2;
+            int ShipPosition_X = MapWeight / 2;
+            int ShipPosition_Y = MapHeight - 2;
 
             int Score = 0;
-            int RemainingAttempts = 0;
+            int RemainingAttempts = 5;
 
-            int TotalLives = 5;
-            int RemainingLives = TotalLives;
+            double TotalLives = 50;
+            double RemainingLives = TotalLives;
 
             string HPBar = "";
 
             bool GameOver = false;
             bool Win = false;
 
+            List<Projectile> projectiles = new List<Projectile>();
+
             while (true)
             {
+                double LifePercentage = (TotalLives - (RemainingLives)) / (TotalLives / 20);
+                int lifePercentInt = (int)LifePercentage;
+
                 if (RemainingLives > 0)
                 {
-                    HPBar = "[" + new String('=', RemainingLives * 4) + new String(' ', (TotalLives - RemainingLives) * 4) + "]";
+                    HPBar = "[" + new String('=', 20 - lifePercentInt) + new String(' ', lifePercentInt) + "]";
                 }
                 else
                 {
-                    HPBar = "[ Game Over ]";
+                    HPBar = "[  Game Over!  ]";
                 }
 
                 if (Console.KeyAvailable)
@@ -56,11 +61,22 @@
                     }
                     else if (KeyPressed.Key == ConsoleKey.Spacebar)
                     {
-
+                        // Adiciona um novo projétil
+                        projectiles.Add(new Projectile(ShipPosition_X, ShipPosition_Y));
                     }
                     else if (KeyPressed.Key == ConsoleKey.P)
                     {
-                        RemainingLives -= 1;
+                        RemainingLives -= 5;
+                    }
+                }
+
+                // Atualiza a posição dos projetéis e remove os que estão fora da tela
+                for (int i = projectiles.Count - 1; i >= 0; i--)
+                {
+                    projectiles[i].UpdatePosition();
+                    if (projectiles[i].Y < 0)
+                    {
+                        projectiles.RemoveAt(i);
                     }
                 }
 
@@ -83,6 +99,10 @@
                         else if (ShipPosition_X == X && ShipPosition_Y == Y)
                         {
                             SceneRendering += "W";
+                        }
+                        else if (projectiles.Exists(p => p.X == X && p.Y == Y))
+                        {
+                            SceneRendering += "|"; // Representa o projétil
                         }
                         else
                         {
