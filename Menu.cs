@@ -1,4 +1,5 @@
-﻿using SpaceInvadersOnConsole_CSharp;
+﻿using GameRendering;
+
 class Menu
 {
     static void Main()
@@ -105,7 +106,8 @@ class Menu
                 " < - >    - Mover para os lados\n" +
                 "   v      - Mover para baixo\n\n" +
                 " [Espaço] - Disparar\n\n" +
-                " Objetivo:\n - Sobreviva o maior tempo possível\n   destruindo as naves inimigas.\n\n" +
+                " Objetivo:\n - Sobreviva o maior tempo possível\n   destruindo as naves inimigas.\n" +
+                " - Caso 15 inimigos fujam, independentemente do estágio, o jogo será encerrado\n\n" +
                 " Pressione ENTER para começar.");
 
             ConsoleKeyInfo KeyPressed = Console.ReadKey();
@@ -117,36 +119,53 @@ class Menu
         }
     }
 
-    public static void CheckMenu(bool GameOver, bool Win)
+    public static void CheckMenu(bool GameOver, bool Win, int EscapedEnemies)
     {
         Console.Clear();
 
         if (GameOver)
         {
-            Console.WriteLine("\n   Game Over!\n");
-            Console.WriteLine("   Pressione Enter para\n   retornar ao menu...");
+            string GameOverReason;
 
-            ConsoleKeyInfo teclaPressionada = Console.ReadKey();
-            if (teclaPressionada.Key == ConsoleKey.Enter)
+
+            if (EscapedEnemies >= 15)
             {
-                Main();
+                GameOverReason = "Você deixou 15 inimigos escaparem...";
             }
             else
             {
-                CheckMenu(GameOver, Win);
+                GameOverReason = "Suas vidas acabaram...";
+            }
+
+            Console.WriteLine($"\n   ======================================\n" +
+                              $"   |           <Fim de Jogo>            |\n" +
+                              $"   ======================================\n" +
+                              $"\n   {GameOverReason}" +
+                              $"\n   [ ENTER para retornar ao menu ]");
+
+            while (true)
+            {
+                ConsoleKeyInfo PressedKey = Console.ReadKey();
+
+                if (PressedKey.Key == ConsoleKey.Enter)
+                {
+                    Main();
+                    break;
+                }
             }
         }
         else if (Win)
         {
-            Console.WriteLine("   Parabéns, você venceu!\n\n   Pressione Enter para\n   retornar ao menu...");
-            ConsoleKeyInfo teclaPressionada = Console.ReadKey();
-            if (teclaPressionada.Key == ConsoleKey.Enter)
+            Console.WriteLine("   Parabéns, você venceu!...\n\n");
+
+            while (true)
             {
-                Main();
-            }
-            else
-            {
-                CheckMenu(GameOver, Win);
+                ConsoleKeyInfo PressedKey = Console.ReadKey();
+
+                if (PressedKey.Key == ConsoleKey.Enter)
+                {
+                    Main();
+                }
             }
         }
     }

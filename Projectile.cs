@@ -5,15 +5,15 @@
         public int X;
         public int Y;
 
-        public Projectile(int startX, int startY)
+        public Projectile(int StartX, int startY)
         {
-            X = startX;
+            X = StartX;
             Y = startY;
         }
 
         public void UpdatePosition()
         {
-            Y -= 1;
+            Y --;
         }
     }
 }

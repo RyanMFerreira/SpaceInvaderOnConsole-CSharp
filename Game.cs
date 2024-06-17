@@ -1,7 +1,7 @@
 ﻿using EnemyNamespace;
 using ProjectileNamespace;
 
-namespace SpaceInvadersOnConsole_CSharp
+namespace GameRendering
 {
     internal class Game
     {
@@ -20,8 +20,10 @@ namespace SpaceInvadersOnConsole_CSharp
             double RemainingLives = TotalLives;
             string HPBar = "";
 
+            int MaxEnemies = 6;
             int EnemyMoveCounter = 0;
             int EnemyMoveLimit = 10;
+            int EscapedEnemies = 0;
 
             bool GameOver = false;
             bool Win = false;
@@ -33,6 +35,8 @@ namespace SpaceInvadersOnConsole_CSharp
 
             while (true)
             {
+                Thread.Sleep(50);
+
                 double LifePercentage = (TotalLives - (RemainingLives)) / (TotalLives / 20);
                 int lifePercentInt = (int)LifePercentage;
 
@@ -78,12 +82,12 @@ namespace SpaceInvadersOnConsole_CSharp
                 static void SpawnEnemy(Random RandomPosition, int MapHeight, int MapWeight, List<Enemy> enemies)
                 {
                     int startX = RandomPosition.Next(1, MapWeight - 2);
-                    int startY = RandomPosition.Next(1, MapHeight / 7);
+                    int startY = RandomPosition.Next(-MapHeight, 1);
 
                     enemies.Add(new Enemy(startX, startY));
                 }
 
-                if (enemies.Count < 6)
+                if (enemies.Count < MaxEnemies)
                 {
                     SpawnEnemy(RandomPosition, MapHeight, MapWeight, enemies);
                 }
@@ -92,6 +96,7 @@ namespace SpaceInvadersOnConsole_CSharp
                 {
                     if (enemies[i].Y > MapHeight)
                     {
+                        EscapedEnemies++;
                         enemies.RemoveAt(i);
                     }
                 }
@@ -99,16 +104,29 @@ namespace SpaceInvadersOnConsole_CSharp
                 EnemyMoveCounter++;
                 if (EnemyMoveCounter >= EnemyMoveLimit)
                 {
-                    foreach (var enemy in enemies)
+                    foreach (Enemy enemy in enemies)
                     {
                         enemy.MoveForward();
                     }
+
                     EnemyMoveCounter = 0;
                 }
 
                 for (int i = projectiles.Count - 1; i >= 0; i--)
                 {
                     projectiles[i].UpdatePosition();
+
+                    for (int e = enemies.Count - 1; e >= 0; e--)
+                    {
+                        if (projectiles[i].X == enemies[e].X && projectiles[i].Y == enemies[e].Y)
+                        {
+                            projectiles.RemoveAt(i);
+                            enemies.RemoveAt(e);
+
+                            Score += 1; 
+                        }
+                    }
+
                     if (projectiles[i].Y < 0)
                     {
                         projectiles.RemoveAt(i);
@@ -155,29 +173,21 @@ namespace SpaceInvadersOnConsole_CSharp
                 Console.WriteLine($"< Pontuação: {Score.ToString("0000")} | Tentativas restantes: {RemainingAttempts.ToString("0000")} >\n" +
                     $"< Vida atual: {HPBar} | {RemainingLives.ToString("000")}/{TotalLives.ToString("000")} >\n");
 
-                Console.WriteLine(SceneRendering);
+                Console.WriteLine(SceneRendering + $"\nInimigos que escaparam: {EscapedEnemies}");
 
                 Console.WriteLine($"Debug:\nPos_X = {ShipPosition_X}. Pos_Y = {ShipPosition_Y}. H = {MapHeight}. W = {MapWeight}\n" +
-                    $"Game Over: {GameOver}\n" +
-                    $"Quantidade de projéteis: {projectiles.Count}. Quantidade de inimigos: {enemies.Count}");
+                    $"Qnt Projéteis: {projectiles.Count}. Qnt Inimigos: {enemies.Count}");
 
-                if (RemainingLives <= 0)
+                if (RemainingLives <= 0 || EscapedEnemies == 15)
                 {
                     GameOver = true;
-
-                    if (GameOver)
-                    {
-                        Menu.CheckMenu(GameOver, Win);
-                        break;
-                    }
                 }
-                else if (Score == 15)
+
+                if (Win || GameOver)
                 {
-                    Menu.CheckMenu(GameOver, Win);
+                    Menu.CheckMenu(GameOver, Win, EscapedEnemies);
                     break;
                 }
-
-                Thread.Sleep(50);
             }
         }
     }

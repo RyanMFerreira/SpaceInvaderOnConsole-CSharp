@@ -5,10 +5,10 @@
         public int X;
         public int Y;
 
-        public Enemy(int startX, int startY)
+        public Enemy(int Start_X, int Start_Y)
         {
-            X = startX;
-            Y = startY;
+            X = Start_X;
+            Y = Start_Y;
         }
 
         public void MoveForward()
