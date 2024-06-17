@@ -92,7 +92,7 @@ namespace GameRendering
                     SpawnEnemy(RandomPosition, MapHeight, MapWeight, enemies);
                 }
 
-                for (int i = enemies.Count - 1; i >= 0; i--)
+                for (int i = 0; i < enemies.Count; i++)
                 {
                     if (enemies[i].Y > MapHeight)
                     {
@@ -112,26 +112,29 @@ namespace GameRendering
                     EnemyMoveCounter = 0;
                 }
 
-                for (int i = projectiles.Count - 1; i >= 0; i--)
+                for (int p = 0; p < projectiles.Count; p++)
                 {
-                    projectiles[i].UpdatePosition();
+                    projectiles[p].UpdatePosition();
 
-                    for (int a = enemies.Count - 1; a >= 0; a--)
+                    for (int e = 0; e < enemies.Count; e++)
                     {
-                        if (projectiles[i].X == enemies[a].X && projectiles[i].Y == enemies[a].Y)
+                        if (projectiles[p].X == enemies[e].X && projectiles[p].Y == enemies[e].Y)
                         {
-                            projectiles.RemoveAt(i);
-                            enemies.RemoveAt(a);
+                            projectiles.RemoveAt(p);
+                            enemies.RemoveAt(e);
 
-                            Score += 1; 
+                            Score += 1;
+
+                            break;
                         }
                     }
 
-                    if (projectiles[i].Y < 0)
+                    if (p < projectiles.Count && projectiles[p].Y < 0)
                     {
-                        projectiles.RemoveAt(i);
+                        projectiles.RemoveAt(p);
                     }
                 }
+
 
                 Console.Clear();
 
