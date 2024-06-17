@@ -1,5 +1,6 @@
 ﻿using DialoguesNamespace;
 using GameRendering;
+using SoundsNamespace;
 
 class Menu
 {
@@ -31,26 +32,31 @@ class Menu
 
             if (KeyPressed.Key == ConsoleKey.UpArrow && SelectedOption > 0)
             {
+                Sounds.MenuMoveSound();
                 SelectedOption--;
             }
             else if (KeyPressed.Key == ConsoleKey.DownArrow && SelectedOption < 2)
             {
+                Sounds.MenuMoveSound();
                 SelectedOption++;
             }
             else if (KeyPressed.Key == ConsoleKey.Enter)
             {
                 if (SelectedOption == 0)
                 {
+                    Sounds.SelectSound();
                     Dialogues.CallDialogueScene();
                     break;
                 }
                 else if (SelectedOption == 1)
                 {
+                    Sounds.SelectSound();
                     Options();
                     break;
                 }
                 else if (SelectedOption == 2)
                 {
+                    Sounds.SelectSound();
                     break;
                 }
             }
@@ -108,17 +114,17 @@ class Menu
                 " < - >    - Mover para os lados\n" +
                 "   v      - Mover para baixo\n\n" +
                 " [Espaço] - Disparar\n\n" +
-                " Objetivo:\n " +
-                " - Sobreviva o maior tempo possível\n" +
-                "   destruindo as naves inimigas.\n\n" +
-                " - Caso 10 inimigos fujam,\n" +
-                "   independentemente do estágio,\n" +
-                "   o jogo será encerrado\n\n" +
+                " Objetivo:\n" +
+                "  - Sobreviva o maior tempo possível\n" +
+                "    destruindo as naves inimigas.\n\n" +
+                "  - Caso 10 inimigos fujam,\n" +
+                "    o jogo será encerrado\n\n" +
                 " Pressione ENTER para começar.");
 
             ConsoleKeyInfo KeyPressed = Console.ReadKey(true);
             if (KeyPressed.Key == ConsoleKey.Enter)
             {
+                Sounds.SelectSound();
                 Game.Start();
                 break;
             }
@@ -155,11 +161,13 @@ class Menu
 
                 if (PressedKey.Key == ConsoleKey.Enter)
                 {
+                    Sounds.SelectSound();
                     Game.Start();
                     break;
                 }
                 else if (PressedKey.Key == ConsoleKey.Q)
                 {
+                    Sounds.SelectSound();
                     Main();
                     break;
                 }

@@ -1,6 +1,8 @@
 ﻿using EnemyNamespace;
 using ProjectileNamespace;
 
+using SoundsNamespace;
+
 namespace GameRendering
 {
     internal class Game
@@ -68,6 +70,7 @@ namespace GameRendering
                     else if (KeyPressed.Key == ConsoleKey.Spacebar)
                     {
                         projectiles.Add(new Projectile(ShipPosition_X, ShipPosition_Y));
+                        Sounds.ShootSound();
                     }
                 }
 
@@ -118,8 +121,10 @@ namespace GameRendering
                         {
                             projectiles.RemoveAt(p);
                             enemies.RemoveAt(e);
-
+                            
                             Score += 1;
+
+                            Sounds.EnemyDeathSound();
 
                             break;
                         }
