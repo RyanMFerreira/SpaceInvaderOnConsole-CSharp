@@ -8,7 +8,7 @@ namespace GameRendering
         public static void Start()
         {
             int MapWeight = 48;
-            int MapHeight = 28;
+            int MapHeight = 26;
 
             int ShipPosition_X = MapWeight / 2;
             int ShipPosition_Y = MapHeight - 2;
@@ -16,13 +16,13 @@ namespace GameRendering
             int Score = 0;
 
             int RemainingAttempts = 5;
-            double TotalLives = 50;
+            double TotalLives = 100;
             double RemainingLives = TotalLives;
             string HPBar = "";
 
             int MaxEnemies = 6;
             int EnemyMoveCounter = 0;
-            int EnemyMoveLimit = 10;
+            int EnemyMoveLimit = 20;
             int EscapedEnemies = 0;
 
             bool GameOver = false;
@@ -35,23 +35,19 @@ namespace GameRendering
 
             while (true)
             {
-                Thread.Sleep(50);
+                Thread.Sleep(25);
 
                 double LifePercentage = (TotalLives - (RemainingLives)) / (TotalLives / 20);
-                int lifePercentInt = (int)LifePercentage;
+                int LifePercentInt = (int)LifePercentage;
 
                 if (RemainingLives > 0)
                 {
-                    HPBar = "[" + new String('=', 20 - lifePercentInt) + new String(' ', lifePercentInt) + "]";
-                }
-                else
-                {
-                    HPBar = "[  Game Over!  ]";
+                    HPBar = "[" + new String('=', 20 - LifePercentInt) + new String(' ', LifePercentInt) + "]";
                 }
 
                 if (Console.KeyAvailable)
                 {
-                    ConsoleKeyInfo KeyPressed = Console.ReadKey();
+                    ConsoleKeyInfo KeyPressed = Console.ReadKey(true);
 
                     if (KeyPressed.Key == ConsoleKey.UpArrow && ShipPosition_Y > 1)
                     {
@@ -73,10 +69,6 @@ namespace GameRendering
                     {
                         projectiles.Add(new Projectile(ShipPosition_X, ShipPosition_Y));
                     }
-                    else if (KeyPressed.Key == ConsoleKey.P)
-                    {
-                        RemainingLives -= 5;
-                    }
                 }
 
                 static void SpawnEnemy(Random RandomPosition, int MapHeight, int MapWeight, List<Enemy> enemies)
@@ -96,8 +88,12 @@ namespace GameRendering
                 {
                     if (enemies[i].Y > MapHeight)
                     {
-                        EscapedEnemies++;
                         enemies.RemoveAt(i);
+                        EscapedEnemies++;
+                    }
+                    else if (enemies[i].X == ShipPosition_X && enemies[i].Y == ShipPosition_Y)
+                    {
+                        RemainingLives -= 2.5;
                     }
                 }
 
@@ -135,32 +131,31 @@ namespace GameRendering
                     }
                 }
 
-
                 Console.Clear();
 
                 string SceneRendering = "";
 
-                for (int Y = 0; Y <= MapHeight; Y++)
+                for (int Cord_Y = 0; Cord_Y <= MapHeight; Cord_Y++)
                 {
-                    for (int X = 0; X < MapWeight; X++)
+                    for (int Cord_X = 0; Cord_X < MapWeight; Cord_X++)
                     {
-                        if (X == 0 || X == MapWeight - 1)
+                        if (Cord_X == 0 || Cord_X == MapWeight - 1)
                         {
                             SceneRendering += "|";
                         }
-                        else if (Y == 0 || Y == MapHeight)
+                        else if (Cord_Y == 0 || Cord_Y == MapHeight)
                         {
-                            SceneRendering += "=";
+                            SceneRendering += "-";
                         }
-                        else if (ShipPosition_X == X && ShipPosition_Y == Y)
+                        else if (ShipPosition_X == Cord_X && ShipPosition_Y == Cord_Y)
                         {
                             SceneRendering += "W";
                         }
-                        else if (projectiles.Exists(p => p.X == X && p.Y == Y))
+                        else if (projectiles.Exists(ProjectilePosition => ProjectilePosition.X == Cord_X && ProjectilePosition.Y == Cord_Y))
                         {
                             SceneRendering += "|";
                         }
-                        else if (enemies.Exists(e => e.X == X && e.Y == Y))
+                        else if (enemies.Exists(EnemyPosition => EnemyPosition.X == Cord_X && EnemyPosition.Y == Cord_Y))
                         {
                             SceneRendering += "X";
                         }
@@ -178,12 +173,18 @@ namespace GameRendering
 
                 Console.WriteLine(SceneRendering + $"\nInimigos que escaparam: {EscapedEnemies}");
 
-                Console.WriteLine($"Debug:\nPos_X = {ShipPosition_X}. Pos_Y = {ShipPosition_Y}. H = {MapHeight}. W = {MapWeight}\n" +
+                Console.WriteLine($"\nDebug:\n" +
+                    $"Pos_X = {ShipPosition_X}. Pos_Y = {ShipPosition_Y}. H = {MapHeight}. W = {MapWeight}\n" +
                     $"Qnt Projéteis: {projectiles.Count}. Qnt Inimigos: {enemies.Count}");
 
-                if (RemainingLives <= 0 || EscapedEnemies == 15)
+                if (RemainingLives <= 0 || EscapedEnemies >= 10)
                 {
-                    GameOver = true;
+                    RemainingAttempts--;
+
+                    if (RemainingAttempts <= 0)
+                    {
+                        GameOver = true;
+                    }
                 }
 
                 if (Win || GameOver)

@@ -1,4 +1,5 @@
-﻿using GameRendering;
+﻿using DialoguesNamespace;
+using GameRendering;
 
 class Menu
 {
@@ -10,22 +11,23 @@ class Menu
         {
             Console.Clear();
 
+            Console.ForegroundColor = ConsoleColor.Green;
 
             Console.WriteLine("" +
                 " ======================================\n" +
-                " |   <Trabalho DS - Space Invaders>   |\n" +
+                " |  < Trabalho DS - Space Invaders >  |\n" +
                 " ======================================\n\n" +
-                " Opções:");
+                " Menu:");
 
             Console.WriteLine(SelectedOption == 0 ? " -> Iniciar" : "    Iniciar");
             Console.WriteLine(SelectedOption == 1 ? " -> Opções " : "    Opções ");
             Console.WriteLine(SelectedOption == 2 ? " -> Fechar " : "    Fechar ");
 
             Console.WriteLine("\n <   Utilize as setas para navegar.   >\n\n" +
-                " @ Ryan, Murilo Andrade, Arthur Martin,\n" +
+                " @ Ryan, Arthur Martin, Murilo Andrade,\n" +
                 " Bruno e Gustavo.");
 
-            ConsoleKeyInfo KeyPressed = Console.ReadKey();
+            ConsoleKeyInfo KeyPressed = Console.ReadKey(true);
 
             if (KeyPressed.Key == ConsoleKey.UpArrow && SelectedOption > 0)
             {
@@ -39,7 +41,7 @@ class Menu
             {
                 if (SelectedOption == 0)
                 {
-                    GameGuide();
+                    Dialogues.CallDialogueScene();
                     break;
                 }
                 else if (SelectedOption == 1)
@@ -68,7 +70,7 @@ class Menu
             Console.WriteLine(SelectedOption == 0 ? " -> Voltar" : "    Voltar");
             Console.WriteLine(SelectedOption == 1 ? " -> Null" : "    Null");
 
-            ConsoleKeyInfo KeyPressed = Console.ReadKey();
+            ConsoleKeyInfo KeyPressed = Console.ReadKey(true);
 
             if (KeyPressed.Key == ConsoleKey.UpArrow && SelectedOption > 0)
             {
@@ -92,25 +94,29 @@ class Menu
         }
     }
 
-    static void GameGuide()
+    public static void GameGuide()
     {
         while (true)
         {
             Console.Clear();
 
             Console.WriteLine(" ======================================\n" +
-                " |             <Tutorial>             |\n" +
+                " |          < Guia Rápido: >          |\n" +
                 " ======================================\n\n" +
                 " Controles:\n\n Setas direcionais:\n" +
                 "   ^      - Mover para cima\n" +
                 " < - >    - Mover para os lados\n" +
                 "   v      - Mover para baixo\n\n" +
                 " [Espaço] - Disparar\n\n" +
-                " Objetivo:\n - Sobreviva o maior tempo possível\n   destruindo as naves inimigas.\n" +
-                " - Caso 15 inimigos fujam, independentemente do estágio, o jogo será encerrado\n\n" +
+                " Objetivo:\n " +
+                " - Sobreviva o maior tempo possível\n" +
+                "   destruindo as naves inimigas.\n\n" +
+                " - Caso 10 inimigos fujam,\n" +
+                "   independentemente do estágio,\n" +
+                "   o jogo será encerrado\n\n" +
                 " Pressione ENTER para começar.");
 
-            ConsoleKeyInfo KeyPressed = Console.ReadKey();
+            ConsoleKeyInfo KeyPressed = Console.ReadKey(true);
             if (KeyPressed.Key == ConsoleKey.Enter)
             {
                 Game.Start();
@@ -128,9 +134,9 @@ class Menu
             string GameOverReason;
 
 
-            if (EscapedEnemies >= 15)
+            if (EscapedEnemies >= 10)
             {
-                GameOverReason = "Você deixou 15 inimigos escaparem...";
+                GameOverReason = "Você deixou 10 inimigos escaparem...";
             }
             else
             {
@@ -138,14 +144,14 @@ class Menu
             }
 
             Console.WriteLine($"\n   ======================================\n" +
-                              $"   |           <Fim de Jogo>            |\n" +
-                              $"   ======================================\n" +
-                              $"\n   {GameOverReason}" +
-                              $"\n   [ ENTER para retornar ao menu ]");
+                              $"   |          < Fim de Jogo >           |\n" +
+                              $"   ======================================\n\n" +
+                              $"   {GameOverReason}\n\n" +
+                              $"   [    ENTER para retornar ao menu.    ]");
 
             while (true)
             {
-                ConsoleKeyInfo PressedKey = Console.ReadKey();
+                ConsoleKeyInfo PressedKey = Console.ReadKey(true);
 
                 if (PressedKey.Key == ConsoleKey.Enter)
                 {
@@ -156,11 +162,11 @@ class Menu
         }
         else if (Win)
         {
-            Console.WriteLine("   Parabéns, você venceu!...\n\n");
+            Console.WriteLine("   ...\n\n");
 
             while (true)
             {
-                ConsoleKeyInfo PressedKey = Console.ReadKey();
+                ConsoleKeyInfo PressedKey = Console.ReadKey(true);
 
                 if (PressedKey.Key == ConsoleKey.Enter)
                 {
