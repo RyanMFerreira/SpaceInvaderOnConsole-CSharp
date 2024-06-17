@@ -116,12 +116,12 @@ namespace GameRendering
                 {
                     projectiles[i].UpdatePosition();
 
-                    for (int e = enemies.Count - 1; e >= 0; e--)
+                    for (int a = enemies.Count - 1; a >= 0; a--)
                     {
-                        if (projectiles[i].X == enemies[e].X && projectiles[i].Y == enemies[e].Y)
+                        if (projectiles[i].X == enemies[a].X && projectiles[i].Y == enemies[a].Y)
                         {
                             projectiles.RemoveAt(i);
-                            enemies.RemoveAt(e);
+                            enemies.RemoveAt(a);
 
                             Score += 1; 
                         }
