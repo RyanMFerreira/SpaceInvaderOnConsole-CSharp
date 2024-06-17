@@ -25,7 +25,7 @@ class Menu
 
             Console.WriteLine("\n <   Utilize as setas para navegar.   >\n\n" +
                 " @ Ryan, Arthur Martin, Murilo Andrade,\n" +
-                " Bruno e Gustavo.");
+                " Bruno e Gustavo.\n\n v.0.2");
 
             ConsoleKeyInfo KeyPressed = Console.ReadKey(true);
 
@@ -133,7 +133,6 @@ class Menu
         {
             string GameOverReason;
 
-
             if (EscapedEnemies >= 10)
             {
                 GameOverReason = "Você deixou 10 inimigos escaparem...";
@@ -147,13 +146,19 @@ class Menu
                               $"   |          < Fim de Jogo >           |\n" +
                               $"   ======================================\n\n" +
                               $"   {GameOverReason}\n\n" +
-                              $"   [    ENTER para retornar ao menu.    ]");
+                              $"   [    ENTER para tentar novamente.    ]\n\n" +
+                              $"   [      Q para retornar ao menu.      ]");
 
             while (true)
             {
                 ConsoleKeyInfo PressedKey = Console.ReadKey(true);
 
                 if (PressedKey.Key == ConsoleKey.Enter)
+                {
+                    Game.Start();
+                    break;
+                }
+                else if (PressedKey.Key == ConsoleKey.Q)
                 {
                     Main();
                     break;

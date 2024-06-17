@@ -1,9 +1,15 @@
-﻿using GameRendering;
-
-namespace DialoguesNamespace
+﻿namespace DialoguesNamespace
 {
     internal class Dialogues
     {
+        static void DisplayTextWithDelay(string Text, int DelayTime)
+        {
+            for (int i = 0; i < Text.Length; i++)
+            {
+                Console.Write(Text[i]);
+                Thread.Sleep(DelayTime);
+            }
+        }
         public static void CallDialogueScene()
         {
             string D_Year = "\n Ano: 2387";
@@ -16,36 +22,18 @@ namespace DialoguesNamespace
 
             string Start = "\n\n [ Pressione Enter para continuar. ]";
 
+            int DelayTime = 70;
+
             Console.Clear();
 
-            for (int i = 0; i < D_Year.Length; i++)
-            {
-                Console.Write(D_Year[i]);
-                Thread.Sleep(60);
-            }
-
-            for (int i = 0; i < D_Location.Length; i++)
-            {
-                Console.Write(D_Location[i]);
-                Thread.Sleep(60);
-            }
-
-            for (int i = 0; i < D_Introduction.Length; i++)
-            {
-                Console.Write(D_Introduction[i]);
-                Thread.Sleep(60);
-            }
-
-            for (int i = 0; i < Start.Length; i++)
-            {
-                Console.Write(Start[i]);
-                Thread.Sleep(60);
-            }
+            DisplayTextWithDelay(D_Year, DelayTime);
+            DisplayTextWithDelay(D_Location, DelayTime);
+            DisplayTextWithDelay(D_Introduction, DelayTime);
+            DisplayTextWithDelay(Start, DelayTime);
 
             while (true)
             {
-                ConsoleKeyInfo KeyPressed = Console.ReadKey(true);
-                if (KeyPressed.Key == ConsoleKey.Enter)
+                if (Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
                     Menu.GameGuide();
                     break;

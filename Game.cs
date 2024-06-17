@@ -15,12 +15,12 @@ namespace GameRendering
 
             int Score = 0;
 
-            int RemainingAttempts = 5;
             double TotalLives = 100;
             double RemainingLives = TotalLives;
             string HPBar = "";
+            int HPBarLength = 20;
 
-            int MaxEnemies = 6;
+            int MaxEnemies = 10;
             int EnemyMoveCounter = 0;
             int EnemyMoveLimit = 20;
             int EscapedEnemies = 0;
@@ -37,12 +37,12 @@ namespace GameRendering
             {
                 Thread.Sleep(25);
 
-                double LifePercentage = (TotalLives - (RemainingLives)) / (TotalLives / 20);
+                double LifePercentage = (TotalLives - (RemainingLives)) / (TotalLives / HPBarLength);
                 int LifePercentInt = (int)LifePercentage;
 
                 if (RemainingLives > 0)
                 {
-                    HPBar = "[" + new String('=', 20 - LifePercentInt) + new String(' ', LifePercentInt) + "]";
+                    HPBar = "[" + new String('=', HPBarLength - LifePercentInt) + new String(' ', LifePercentInt) + "]";
                 }
 
                 if (Console.KeyAvailable)
@@ -151,40 +151,58 @@ namespace GameRendering
                         {
                             SceneRendering += "W";
                         }
-                        else if (projectiles.Exists(ProjectilePosition => ProjectilePosition.X == Cord_X && ProjectilePosition.Y == Cord_Y))
-                        {
-                            SceneRendering += "|";
-                        }
-                        else if (enemies.Exists(EnemyPosition => EnemyPosition.X == Cord_X && EnemyPosition.Y == Cord_Y))
-                        {
-                            SceneRendering += "X";
-                        }
                         else
                         {
-                            SceneRendering += " ";
+                            bool Projectile_View = false;
+                            bool Enemy_View = false;
+
+                            for (int i = 0; i < enemies.Count; i++)
+                            {
+                                if (enemies[i].X == Cord_X && enemies[i].Y == Cord_Y)
+                                {
+                                    Enemy_View = true;
+                                    break;
+                                }
+                            }
+                            for (int i = 0; i < projectiles.Count; i++)
+                            {
+                                if (projectiles[i].X == Cord_X && projectiles[i].Y == Cord_Y)
+                                {
+                                    Projectile_View = true;
+                                    break;
+                                }
+                            }
+
+                            if (Enemy_View)
+                            {
+                                SceneRendering += "X";
+                            }
+                            else if (Projectile_View)
+                            {
+                                SceneRendering += "|";
+                            }
+                            else
+                            {
+                                SceneRendering += " ";
+                            }
                         }
                     }
 
                     SceneRendering += "\n";
                 }
 
-                Console.WriteLine($"< Pontuação: {Score.ToString("0000")} | Tentativas restantes: {RemainingAttempts.ToString("0000")} >\n" +
-                    $"< Vida atual: {HPBar} | {RemainingLives.ToString("000")}/{TotalLives.ToString("000")} >\n");
+                Console.WriteLine($"< Pontuação: {Score.ToString("00000")}. Inimigos que escaparam: {EscapedEnemies.ToString("00")} >\n" +
+                                  $"< Vida atual: {HPBar} | {RemainingLives}/{TotalLives} >\n");
 
-                Console.WriteLine(SceneRendering + $"\nInimigos que escaparam: {EscapedEnemies}");
+                Console.WriteLine(SceneRendering);
 
-                Console.WriteLine($"\nDebug:\n" +
+                Console.WriteLine($"Debug Menu:\n" +
                     $"Pos_X = {ShipPosition_X}. Pos_Y = {ShipPosition_Y}. H = {MapHeight}. W = {MapWeight}\n" +
-                    $"Qnt Projéteis: {projectiles.Count}. Qnt Inimigos: {enemies.Count}");
+                    $"Qnt Projéteis: {projectiles.Count}. Qnt Inimigos: {enemies.Count}. ");
 
                 if (RemainingLives <= 0 || EscapedEnemies >= 10)
                 {
-                    RemainingAttempts--;
-
-                    if (RemainingAttempts <= 0)
-                    {
-                        GameOver = true;
-                    }
+                    GameOver = true;
                 }
 
                 if (Win || GameOver)
