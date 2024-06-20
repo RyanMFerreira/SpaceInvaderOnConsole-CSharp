@@ -53,19 +53,19 @@ namespace GameRendering
 
                     if (KeyPressed.Key == ConsoleKey.UpArrow && ShipPosition_Y > 1)
                     {
-                        ShipPosition_Y -= 1;
+                        ShipPosition_Y--;
                     }
                     else if (KeyPressed.Key == ConsoleKey.DownArrow && ShipPosition_Y < (MapHeight - 1))
                     {
-                        ShipPosition_Y += 1;
+                        ShipPosition_Y++;
                     }
                     else if (KeyPressed.Key == ConsoleKey.LeftArrow && ShipPosition_X > 1)
                     {
-                        ShipPosition_X -= 1;
+                        ShipPosition_X--;
                     }
                     else if (KeyPressed.Key == ConsoleKey.RightArrow && ShipPosition_X < (MapWeight - 2))
                     {
-                        ShipPosition_X += 1;
+                        ShipPosition_X++;
                     }
                     else if (KeyPressed.Key == ConsoleKey.Spacebar)
                     {
@@ -103,25 +103,25 @@ namespace GameRendering
                 EnemyMoveCounter++;
                 if (EnemyMoveCounter >= EnemyMoveLimit)
                 {
-                    foreach (Enemy enemy in enemies)
+                    for (int i = 0; i < enemies.Count; i++)
                     {
-                        enemy.MoveForward();
+                        enemies[i].MoveForward();
                     }
 
                     EnemyMoveCounter = 0;
                 }
 
-                for (int p = 0; p < projectiles.Count; p++)
+                for (int P_Count = 0; P_Count < projectiles.Count; P_Count++)
                 {
-                    projectiles[p].UpdatePosition();
+                    projectiles[P_Count].UpdatePosition();
 
-                    for (int e = 0; e < enemies.Count; e++)
+                    for (int E_Count = 0; E_Count < enemies.Count; E_Count++)
                     {
-                        if (projectiles[p].X == enemies[e].X && projectiles[p].Y == enemies[e].Y)
+                        if (projectiles[P_Count].X == enemies[E_Count].X && projectiles[P_Count].Y == enemies[E_Count].Y)
                         {
-                            projectiles.RemoveAt(p);
-                            enemies.RemoveAt(e);
-                            
+                            projectiles.RemoveAt(P_Count);
+                            enemies.RemoveAt(E_Count);
+
                             Score += 1;
 
                             Sounds.EnemyDeathSound();
@@ -130,9 +130,9 @@ namespace GameRendering
                         }
                     }
 
-                    if (p < projectiles.Count && projectiles[p].Y < 0)
+                    if (P_Count < projectiles.Count && projectiles[P_Count].Y < 0)
                     {
-                        projectiles.RemoveAt(p);
+                        projectiles.RemoveAt(P_Count);
                     }
                 }
 
