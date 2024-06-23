@@ -1,8 +1,6 @@
 ﻿using EnemyNamespace;
 using ProjectileNamespace;
 
-using SoundsNamespace;
-
 namespace GameRendering
 {
     internal class Game
@@ -70,7 +68,6 @@ namespace GameRendering
                     else if (KeyPressed.Key == ConsoleKey.Spacebar)
                     {
                         projectiles.Add(new Projectile(ShipPosition_X, ShipPosition_Y));
-                        Sounds.ShootSound();
                     }
                 }
 
@@ -96,7 +93,8 @@ namespace GameRendering
                     }
                     else if (enemies[i].X == ShipPosition_X && enemies[i].Y == ShipPosition_Y)
                     {
-                        RemainingLives -= 2.5;
+                        enemies.Remove(enemies[i]);
+                        RemainingLives -= 25;
                     }
                 }
 
@@ -123,8 +121,6 @@ namespace GameRendering
                             enemies.RemoveAt(E_Count);
 
                             Score += 1;
-
-                            Sounds.EnemyDeathSound();
 
                             break;
                         }
@@ -197,7 +193,7 @@ namespace GameRendering
                 }
 
                 Console.WriteLine($"< Pontuação: {Score.ToString("00000")}. Inimigos que escaparam: {EscapedEnemies.ToString("00")} >\n" +
-                                  $"< Vida atual: {HPBar} | {RemainingLives}/{TotalLives} >\n");
+                                  $"< Vida atual: {HPBar} | {RemainingLives.ToString("000")}/{TotalLives} >\n");
 
                 Console.WriteLine(SceneRendering);
 

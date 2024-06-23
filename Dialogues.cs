@@ -1,6 +1,4 @@
-﻿using SoundsNamespace;
-
-namespace DialoguesNamespace
+﻿namespace DialoguesNamespace
 {
     internal class Dialogues
     {
@@ -9,8 +7,6 @@ namespace DialoguesNamespace
             for (int i = 0; i < Text.Length; i++)
             {
                 Console.Write(Text[i]);
-
-                Sounds.Writing();
 
                 Thread.Sleep(DelayTime);
             }
@@ -40,7 +36,6 @@ namespace DialoguesNamespace
             {
                 if (Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
-                    Sounds.SelectSound();
                     Menu.GameGuide();
                     break;
                 }
